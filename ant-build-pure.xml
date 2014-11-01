@@ -1,0 +1,70 @@
+<project name="tcp-over-dns" default="dist" basedir=".">
+	<description>
+		ANT build file for tcp-over-dns without embedded libraries
+	</description>
+
+	<!-- set global properties for this build -->
+	<property name="libdir" location="/usr/share/java" />
+	<property name="src" location="src" />
+	<property name="build" location="build" />
+	<property name="dist" location="release-files" />
+
+	<target name="init" description="initialize build environment">
+		<tstamp/>
+		<mkdir dir="${build}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac
+			srcdir="${src}"
+			destdir="${build}" 
+			includes="**/*.java"
+			includeAntRuntime="no"
+		>
+			<classpath>
+				<pathelement path="${libdir}/dnsjava.jar" />
+				<pathelement path="${libdir}/jargs.jar" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="server" depends="compile" description="build server JAR">
+		<mkdir dir="${dist}" />
+		<jar 
+			jarfile="${dist}/tcp-over-dns-server.jar" 
+			basedir="${build}"
+			excludes="client/**"
+		>
+			<manifest>
+				<attribute name="Main-Class" value="server.Server" />
+				<attribute name="Class-Path" value="${libdir}/dnsjava.jar ${libdir}/jargs.jar" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="client" depends="compile" description="build client JAR">
+		<mkdir dir="${dist}" />
+		<jar 
+			jarfile="${dist}/tcp-over-dns-client.jar" 
+			basedir="${build}"
+			excludes="server/**"
+		>
+			<manifest>
+				<attribute name="Main-Class" value="client.Client" />
+				<attribute name="Class-Path" value="${libdir}/dnsjava.jar ${libdir}/jargs.jar" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="dist" depends="client,server" description="build distribution">
+	</target> 
+
+
+	<target name="clean" description="clean up">
+		<delete dir="${build}" />
+		<delete>
+			<fileset dir="${dist}" includes="*.jar" />
+		</delete>
+	</target>
+
+</project>

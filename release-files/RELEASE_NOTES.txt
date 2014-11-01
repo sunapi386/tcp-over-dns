@@ -1,0 +1,54 @@
+Please submit bugs/patches to tim _at_ analogbit.com.
+
+Version 1.3
+===============
+Added client side encode options to workaround the 0x20 bit hack.
+http://tools.ietf.org/html/draft-vixie-dnsext-dns0x20-00
+Client command --client-enc hexhack37 or --client-enc base16 should work around this.
+
+Version 1.2
+===============
+Minor fixups and improved backwards compatibility with old VMs. Client tested
+to run in 1.3 VM's after RetroWeaving the jar. Proof of concept and some patches
+submitted by 'John'.
+
+Version 1.1
+===============
+Added CNAME request support, this can be more reliable than TXT. Client command
+line option "--query-type CNAME".
+Updated DNS Java library to 2.1.0
+Merged Marcus Cobden's inetd support. 
+
+Version 1.0
+===============
+TCP connections no longer close prematurely when one half of the TCP socket
+closes.
+Connections are throttled when idle, this reduces bandwidth usage and lets 
+multiple streams work together faster.
+
+Version 1.0b1
+===============
+TCP connections no longer have a close/end-stream race.
+Client/stream IDs are now 16 bit, this alleviates contention for IDs.
+
+Version 0.9
+===============
+This is the first version that is usable. If there is any demand for 
+improvements then I'll make em.
+
+Known Bugs:
+1.) A TCP connection can close and lose data at the end of a session. For this
+    reason its currently best to use SSH proxies and VPN connections. 
+    (Socket close / data race).
+2.) A client will tell the server to continually close a connection until it is 
+    acknowledged, this can cause a close for a different client who gets the
+    same clientID. 
+
+Todo:
+1.) Add a command line option for encodings and compression.
+2.) Add a command line option to disable TCP or UDP.
+3.) Javadoc it.
+4.) Detect if a DNS passthrough server has failed.
+5.) Tunnel all TCP connections through a single stream instead of making many.
+6.) Investigate intentionally truncated packets (truncate the Name). To save on 
+    bandwidth.

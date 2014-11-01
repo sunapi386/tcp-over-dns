@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Tue Aug 30 22:22:42 MST 2011
+onejar.license.required=false
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=tcp-over-dns-server.jar
+manifest.mergeall=true
+manifest.mainclass=server.Server
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=<po|tcp-over-dns>~client/
+includes=
